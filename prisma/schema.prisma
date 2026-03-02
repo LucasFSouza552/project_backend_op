@@ -1,0 +1,275 @@
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// ENUMS
+
+enum MissionStatus {
+  CONCLUIDA
+  FALHA
+  ABANDONADA
+  SELADA
+  ANDAMENTO
+}
+
+enum AgentStatus {
+  ATIVO
+  MORTO
+  DESAPARECIDO
+  CORROMPIDO
+  APOSENTADO
+}
+
+enum RiskLevel {
+  VERY_LOW
+  LOW
+  MEDIUM
+  HIGH
+  VERY_HIGH
+}
+
+enum Privilege {
+  RECRUTA
+  OPERADOR
+  AGENTE_ESPECIAL
+  OFICIAL_DE_OPERACOES
+  AGENTE_DE_ELITE
+}
+
+enum AgentRole {
+  COMBATENTE
+  ESPECIALISTA
+  OCULTISTA
+  DESCONHECIDO
+}
+
+enum TeamDesignation {
+  CONTENCAO
+  RECONHECIMENTO
+  RESPOSTA_RAPIDA
+  SUPORTE
+  INVESTIGACAO
+}
+
+enum TeamStatus {
+  ATIVA
+  DISSOLVIDA
+  DESAPARECIDA
+}
+
+enum ItemType {
+  ARMA
+  ARTEFATO
+  RELIQUIA
+  CONSUMIVEL
+  OBJETO_COMUM_CORROMPIDO
+}
+
+
+
+enum ItemStatus {
+  CONTIDO
+  PERDIDO
+  DESTRUIDO
+  SELADO
+  EM_USO
+}
+
+enum OrganizationType {
+  SEITA
+  CORPORACAO
+  CULTO
+  FACCAO
+  DESCONHECIDA
+}
+
+enum OperationScope {
+  LOCAL
+  REGIONAL
+  NACIONAL
+  GLOBAL
+  DESCONHECIDA
+}
+
+enum OrderRelationship {
+  ALIADO
+  HOSTIL
+  NEUTRO
+  DESCONHECIDO
+  INFILTRADO
+}
+
+enum OrganizationStatus {
+  ATIVA
+  DISSOLVIDA
+  EXTINTA
+  DESCONHECIDA
+}
+
+enum ItemSize {
+  SMALL
+  MEDIUM
+  BIG
+}
+
+enum ItemElement {
+  MORTE
+  ENERGIA
+  SANGUE
+  CONHECIMENTO
+  MEDO
+  DESCONHECIDO
+}
+
+// MODELS
+
+model Team {
+  id          String          @map("_id") @id @default(auto()) @db.ObjectId
+  name        String
+
+  designation TeamDesignation
+  status      TeamStatus
+
+  agents      AgentTeam[]
+  // missions    MissionTeam[] // descomentar quando Mission/MissionTeam forem implementados
+
+  createdAt   DateTime                    @default(now())
+  updatedAt   DateTime                    @updatedAt
+}
+
+model Agent {
+  id          String      @map("_id") @id @default(auto()) @db.ObjectId
+  name        String
+  image       String?
+  role        AgentRole
+  status      AgentStatus             @default(ATIVO)
+  accessLevel Privilege               @default(RECRUTA)
+
+  lore        String?
+
+  teams       AgentTeam[]
+
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+}
+
+model Occultist {
+  id            String      @map("_id") @id @default(auto()) @db.ObjectId
+  name          String
+  status        AgentStatus             @default(ATIVO)
+  image         String?
+  lore          String?
+  assigned_team String?
+  cases         String?
+}
+
+model Items {
+  id          String      @map("_id") @id @default(auto()) @db.ObjectId
+  name        String
+  image       String?
+  type        ItemType
+  size        ItemSize
+
+  elements    ItemElement             @default(DESCONHECIDO)
+  description String?
+  containment String?
+  extra_notes String?
+
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+}
+
+model Organization {
+  id           String             @map("_id") @id @default(auto()) @db.ObjectId
+
+  name         String
+
+  type         OrganizationType               @default(DESCONHECIDA)
+  scope        OperationScope
+
+  ideology     String?
+
+  threatLevel  RiskLevel
+  relationship OrderRelationship
+
+  status       OrganizationStatus
+
+  createdAt    DateTime                       @default(now())
+  updatedAt    DateTime                       @updatedAt
+}
+
+
+// RELATION TABLES
+
+model AgentTeam {
+  id       String   @map("_id") @id @default(auto()) @db.ObjectId
+
+  agentId  String               @db.ObjectId
+  agent    Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  teamId   String               @db.ObjectId
+  team     Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  joinedAt DateTime             @default(now())
+
+  @@unique([agentId, teamId])
+  @@index([agentId])
+  @@index([teamId])
+}
+
+// model MissionAgent {
+//   id        String      @map("_id") @id @default(auto()) @db.ObjectId
+
+//   missionId String                  @db.ObjectId
+//   agentId   String                  @db.ObjectId
+
+//   mission   Mission     @relation(fields: [missionId], references: [id])
+//   agent     Agent       @relation(fields: [agentId], references: [id])
+
+//   status    AgentStatus
+//   notes     String?
+// }
+
+// model MissionTeam {
+//   id         String   @map("_id") @id @default(auto()) @db.ObjectId
+
+//   missionId  String               @db.ObjectId
+//   teamId     String               @db.ObjectId
+
+//   mission    Mission  @relation(fields: [missionId], references: [id])
+//   team       Team     @relation(fields: [teamId], references: [id])
+
+//   assignedAt DateTime             @default(now())
+//   notes      String?
+// }
+
+// model MissionItem {
+//   id        String  @map("_id") @id @default(auto()) @db.ObjectId
+
+//   missionId String              @db.ObjectId
+//   itemId    String              @db.ObjectId
+
+//   mission   Mission @relation(fields: [missionId], references: [id])
+//   item      Items   @relation(fields: [itemId], references: [id])
+
+//   notes     String?
+// }
+
+// model OrganizationMission {
+//   id             String       @map("_id") @id @default(auto()) @db.ObjectId
+
+//   organizationId String                   @db.ObjectId
+//   missionId      String                   @db.ObjectId
+
+//   organization   Organization @relation(fields: [organizationId], references: [id])
+//   mission        Mission      @relation(fields: [missionId], references: [id])
+
+//   notes          String?
+// }
