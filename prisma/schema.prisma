@@ -72,8 +72,6 @@ enum ItemType {
   OBJETO_COMUM_CORROMPIDO
 }
 
-
-
 enum ItemStatus {
   CONTIDO
   PERDIDO
@@ -136,9 +134,9 @@ model Team {
 
   designation TeamDesignation
   status      TeamStatus
-
+  
   agents      AgentTeam[]
-  // missions    MissionTeam[] // descomentar quando Mission/MissionTeam forem implementados
+  cases       TeamCases[]
 
   createdAt   DateTime                    @default(now())
   updatedAt   DateTime                    @updatedAt
@@ -161,29 +159,29 @@ model Agent {
 }
 
 model Occultist {
-  id            String      @map("_id") @id @default(auto()) @db.ObjectId
-  name          String
-  status        AgentStatus             @default(ATIVO)
-  image         String?
-  lore          String?
-  assigned_team String?
-  cases         String?
+  id          String           @map("_id") @id @default(auto()) @db.ObjectId
+  name        String
+  status      AgentStatus                  @default(ATIVO)
+  accessLevel Privilege                    @default(RECRUTA)
+  image       String?
+  lore        String?
+  cases       OccultistCases[]
 }
 
-model Items {
-  id          String      @map("_id") @id @default(auto()) @db.ObjectId
-  name        String
-  image       String?
-  type        ItemType
-  size        ItemSize
+  model Items {
+  id            String      @map("_id") @id @default(auto()) @db.ObjectId
+  name          String
+  image         String?
+  type          ItemType
+  size          ItemSize
+accessLevel Privilege               @default(RECRUTA)
+  elements      ItemElement             @default(DESCONHECIDO)
+  description   String?
+  containment   String?
+  extra_notes   String?
 
-  elements    ItemElement             @default(DESCONHECIDO)
-  description String?
-  containment String?
-  extra_notes String?
-
-  createdAt   DateTime                @default(now())
-  updatedAt   DateTime                @updatedAt
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
 }
 
 model Organization {
@@ -195,7 +193,7 @@ model Organization {
   scope        OperationScope
 
   ideology     String?
-
+  accessLevel  Privilege                      @default(RECRUTA)
   threatLevel  RiskLevel
   relationship OrderRelationship
 
@@ -205,71 +203,59 @@ model Organization {
   updatedAt    DateTime                       @updatedAt
 }
 
+model Cases {
+  id                String           @map("_id") @id @default(auto()) @db.ObjectId
+  name              String
+  description       String
+  accessLevel       Privilege                    @default(RECRUTA)
+  occultists        OccultistCases[]
+  teams             TeamCases[]
+  }
 
-// RELATION TABLES
+  // RELATION TABLES
 
-model AgentTeam {
-  id       String   @map("_id") @id @default(auto()) @db.ObjectId
+  model AgentTeam {
+  id                String           @map("_id") @id @default(auto()) @db.ObjectId
 
-  agentId  String               @db.ObjectId
-  agent    Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  agentId           String                       @db.ObjectId
+  agent             Agent            @relation(fields: [agentId], references: [id], onDelete: Cascade)
 
-  teamId   String               @db.ObjectId
-  team     Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId            String                       @db.ObjectId
+  team              Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
-  joinedAt DateTime             @default(now())
+  joinedAt          DateTime                     @default(now())
 
   @@unique([agentId, teamId])
   @@index([agentId])
   @@index([teamId])
 }
 
-// model MissionAgent {
-//   id        String      @map("_id") @id @default(auto()) @db.ObjectId
+model OccultistCases  {
+  id          String    @map("_id") @id @default(auto()) @db.ObjectId
 
-//   missionId String                  @db.ObjectId
-//   agentId   String                  @db.ObjectId
+  occultistId String                @db.ObjectId
+  occultist   Occultist @relation(fields: [occultistId], references: [id], onDelete: Cascade)
 
-//   mission   Mission     @relation(fields: [missionId], references: [id])
-//   agent     Agent       @relation(fields: [agentId], references: [id])
+  casesId     String                @db.ObjectId
+  cases       Cases     @relation(fields: [casesId], references: [id], onDelete: Cascade)
 
-//   status    AgentStatus
-//   notes     String?
-// }
+  @@unique([occultistId, casesId])
+  @@index([occultistId])
+  @@index([casesId])
+}
 
-// model MissionTeam {
-//   id         String   @map("_id") @id @default(auto()) @db.ObjectId
+model TeamCases {
+  id         String   @map("_id") @id @default(auto()) @db.ObjectId
 
-//   missionId  String               @db.ObjectId
-//   teamId     String               @db.ObjectId
+  teamId     String               @db.ObjectId
+  team       Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
-//   mission    Mission  @relation(fields: [missionId], references: [id])
-//   team       Team     @relation(fields: [teamId], references: [id])
+  caseId     String               @db.ObjectId
+  case       Cases    @relation(fields: [caseId], references: [id], onDelete: Cascade)
 
-//   assignedAt DateTime             @default(now())
-//   notes      String?
-// }
+  assignedAt DateTime             @default(now())
 
-// model MissionItem {
-//   id        String  @map("_id") @id @default(auto()) @db.ObjectId
-
-//   missionId String              @db.ObjectId
-//   itemId    String              @db.ObjectId
-
-//   mission   Mission @relation(fields: [missionId], references: [id])
-//   item      Items   @relation(fields: [itemId], references: [id])
-
-//   notes     String?
-// }
-
-// model OrganizationMission {
-//   id             String       @map("_id") @id @default(auto()) @db.ObjectId
-
-//   organizationId String                   @db.ObjectId
-//   missionId      String                   @db.ObjectId
-
-//   organization   Organization @relation(fields: [organizationId], references: [id])
-//   mission        Mission      @relation(fields: [missionId], references: [id])
-
-//   notes          String?
-// }
+  @@unique([teamId, caseId])
+  @@index([teamId])
+  @@index([caseId])
+}

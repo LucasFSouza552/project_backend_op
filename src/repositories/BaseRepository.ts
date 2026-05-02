@@ -1,40 +1,48 @@
 import { prisma } from "../lib/prisma";
 
 export class BaseRepository<
-    T,
-    CreateInput,
-    UpdateInput> {
+    Entity,
+    Create,
+    Update> {
     constructor(protected model: any) { }
 
-    async findAll(params?: any): Promise<T[]> {
+    async findAll(params?: any): Promise<Entity[]> {
         return this.model.findMany(params);
     }
 
-    async findById(id: string, include?: any): Promise<T | null> {
+    async findById(id: string, include?: any): Promise<Entity | null> {
         return this.model.findUnique({
             where: { id },
             include
         });
     }
 
-    async create(data: CreateInput): Promise<T> {
+    async create(data: Create): Promise<Entity> {
         return this.model.create({ data });
     }
 
-    async update(id: string, data: UpdateInput): Promise<T> {
+    async update(id: string, data: Update): Promise<Entity> {
         return this.model.update({
             where: { id },
             data
         });
     }
 
-    async delete(id: string): Promise<T> {
+    async delete(id: string): Promise<Entity> {
         return this.model.delete({
             where: { id }
         });
     }
 
-    async deleteWhere(where: any): Promise<T> {
+    async deleteWhere(where: any): Promise<Entity> {
         return this.model.delete({ where });
     }
+
+    async findUnique(where: any, options?: { include?: any, select?: any }): Promise<Entity | null> {
+        return this.model.findUnique({
+            where,
+            ...options
+        });
+    }
+
 }

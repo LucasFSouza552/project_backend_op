@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { AgentController } from "../controllers/AgentController";
+import { upload } from "../middleware/upload";
 
 const router = Router();
 const controller = new AgentController();
 
 router.get("/", controller.getAll);
 router.get("/:id", controller.getOne);
-router.post("/", controller.create);
-router.put("/:id", controller.update);
+router.post("/", upload.single("image"), controller.create);
+router.put("/:id", upload.single("image"), controller.update);
 router.delete("/:id", controller.delete);
 
 router.post("/:agentId/teams/:teamId", controller.addToTeam);

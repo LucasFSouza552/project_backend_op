@@ -1,13 +1,17 @@
 import { Router } from "express";
 import { OccultistController } from "../controllers/OccultistController";
+import { upload } from "../middleware/upload";
 
 const router = Router();
 const controller = new OccultistController();
 
 router.get("/", controller.getAll);
 router.get("/:id", controller.getOne);
-router.post("/", controller.create);
-router.put("/:id", controller.update);
+router.post("/", upload.single("image"), controller.create);
+router.put("/:id", upload.single("image"), controller.update);
 router.delete("/:id", controller.delete);
+
+router.post("/:occultistId/cases/:caseId", controller.addToCase);
+router.delete("/:occultistId/cases/:caseId", controller.removeFromCase);
 
 export default router;

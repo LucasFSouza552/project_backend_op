@@ -1,9 +1,28 @@
-import type { Prisma, Team, TeamDesignation, TeamStatus } from "@prisma/client";
+import type { Cases, Prisma, Team, TeamDesignation, TeamStatus } from "@prisma/client";
 import { BaseService } from "./BaseService";
 import { TeamRepository } from "../repositories/TeamRepository";
 import { createTeamSchema, updateTeamSchema } from "../dtos/team.dto";
 import { AgentTeamRepository } from "../repositories/AgentTeamRepository";
 import { AgentTeamService } from "./AgentTeamService";
+
+type TeamWithRelations = Prisma.TeamGetPayload<{
+    include: {
+        agents: {
+            include: {
+                agent: true;
+            };
+        };
+        cases: {
+            include: {
+                case: true;
+            };
+        };
+    };
+}>;
+
+type TeamWithCases = Omit<TeamWithRelations, 'cases'> & {
+    cases: Cases[];
+};
 
 export class TeamService extends BaseService<Team, Prisma.TeamCreateInput, Prisma.TeamUpdateInput> {
     private agentTeamService: AgentTeamService;
@@ -13,6 +32,33 @@ export class TeamService extends BaseService<Team, Prisma.TeamCreateInput, Prism
         super(repository);
 
         this.agentTeamService = new AgentTeamService(new AgentTeamRepository());
+    }
+
+    override async getOne(id: string) {
+        const team = await this.repository.findUnique({ id }, {
+            include: {
+                agents: {
+                    include: {
+                        agent: true
+                    }
+                },
+                cases: {
+                    include: {
+                        case: true
+                    }
+                }
+            }
+        });
+
+        if (!team) return null;
+
+        const typedTeam = team as unknown as TeamWithRelations;
+
+        return {
+            ...typedTeam,
+            agents: typedTeam.agents.map(a => a.agent),
+            cases: typedTeam.cases.map(c => c.case)
+        };
     }
 
     override getAll(filters?: { designation?: TeamDesignation; status?: TeamStatus }) {

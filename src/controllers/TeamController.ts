@@ -1,7 +1,9 @@
-import type { Prisma, Team, TeamDesignation, TeamStatus } from "@prisma/client";
-import { TeamService } from "../services/TeamService";
-import { BaseController } from "./BaseController";
 import type { NextFunction, Request, Response } from "express";
+
+import type { Prisma, Team, TeamDesignation, TeamStatus } from "@prisma/client";
+import { BaseController } from "./BaseController";
+
+import { TeamService } from "../services/TeamService";
 
 export class TeamController extends BaseController<Team, Prisma.TeamCreateInput, Prisma.TeamUpdateInput> {
     private teamService: TeamService;
@@ -26,6 +28,7 @@ export class TeamController extends BaseController<Team, Prisma.TeamCreateInput,
             const filters: { designation?: TeamDesignation; status?: TeamStatus } = {};
             if (designation && typeof designation === "string") filters.designation = designation as TeamDesignation;
             if (status && typeof status === "string") filters.status = status as TeamStatus;
+
             const items = await this.teamService.getAll(filters);
             res.json(items);
         } catch (e: unknown) {

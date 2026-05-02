@@ -1,11 +1,24 @@
-import type { Agent, AgentStatus, AgentRole, Prisma } from "@prisma/client";
-import { BaseService } from "./BaseService";
-import { AgentRepository } from "../repositories/AgentRepository";
-import { createAgentSchema, updateAgentSchema } from "../dtos/agent.dto";
+import type { Agent, AgentStatus, AgentRole, Prisma, Team } from "@prisma/client";
 import { AgentTeamService } from "./AgentTeamService";
+import { BaseService } from "./BaseService";
+import { createAgentSchema, updateAgentSchema } from "../dtos/agent.dto";
+import { AgentRepository } from "../repositories/AgentRepository";
 import { AgentTeamRepository } from "../repositories/AgentTeamRepository";
 
-export type AgentWithTeam = Agent & { teams: { id: string; name: string; }[] };
+
+type AgentWithRelations = Prisma.AgentGetPayload<{
+  include: {
+    teams: {
+      include: {
+        team: true;
+      };
+    };
+  };
+}>;
+
+export type AgentWithTeam = Omit<AgentWithRelations, 'teams'> & {
+  teams: Team[];
+};
 
 export class AgentService extends BaseService<Agent, Prisma.AgentCreateInput,
   Prisma.AgentUpdateInput> {
@@ -26,7 +39,6 @@ export class AgentService extends BaseService<Agent, Prisma.AgentCreateInput,
   }
 
   override async update(id: string, data: Prisma.AgentUpdateInput): Promise<AgentWithTeam> {
-
     const validated = updateAgentSchema.parse(data);
 
     await this.repository.update(id, validated as Prisma.AgentUpdateInput);
@@ -41,7 +53,7 @@ export class AgentService extends BaseService<Agent, Prisma.AgentCreateInput,
   }
 
   // Lista agentes com filtros opcionais e include de team
-  override getAll(filters?: { status?: AgentStatus; role?: AgentRole; }) {
+  override async getAll(filters?: { status?: AgentStatus; role?: AgentRole; }) {
     const where: Record<string, unknown> = {};
     if (filters?.status) where.status = filters.status;
     if (filters?.role) where.role = filters.role;
@@ -55,8 +67,22 @@ export class AgentService extends BaseService<Agent, Prisma.AgentCreateInput,
 
   // Busca um agente por ID com team
   override async getOne(id: string): Promise<AgentWithTeam | null> {
-    const list = await this.repository.findById(id, { teams: true });
-    return list as AgentWithTeam | null;
+    const agent = await this.repository.findById(id, {
+      teams: {
+        include: {
+          team: true
+        }
+      }
+    });
+
+    if (!agent) return null;
+
+    const typedAgent = agent as unknown as AgentWithRelations;
+
+    return {
+      ...typedAgent,
+      teams: typedAgent.teams.map(t => t.team)
+    };
   }
 
   override async delete(agentId: string) {
@@ -65,11 +91,15 @@ export class AgentService extends BaseService<Agent, Prisma.AgentCreateInput,
   }
 
   async addAgentToTeam(agentId: string, teamId: string) {
-    return await this.agentTeamService.addToTeam(agentId, teamId);
+    return await this.agentTeamService.addAgentToTeam(agentId, teamId);
   }
 
   async removeAgentFromTeam(agentId: string, teamId: string) {
-    return await this.agentTeamService.removeFromTeam(agentId, teamId);
+    return await this.agentTeamService.removeAgentFromTeam(agentId, teamId);
+  }
+
+  async addImage(agentId: string, image: string) {
+    return await this.repository.update(agentId, { image });
   }
 
 }

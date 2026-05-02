@@ -1,12 +1,13 @@
 import { type NextFunction, type Request, type Response } from "express";
+
 import type { BaseService } from "../services/BaseService";
 
-export class BaseController<T,
-  CreateInput,
-  UpdateInput> {
-  constructor(private service: BaseService<T,
-    CreateInput,
-    UpdateInput>) {
+export class BaseController<Entity,
+  Create,
+  Update> {
+  constructor(private service: BaseService<Entity,
+    Create,
+    Update>) {
 
   }
 
@@ -32,7 +33,8 @@ export class BaseController<T,
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const item = await this.service.create(req.body);
+      const body = req.body as Create;
+      const item = await this.service.create(body);
       res.status(201).json(item);
     } catch (e: unknown) {
       next(e);
@@ -42,10 +44,11 @@ export class BaseController<T,
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id as string;
-      const item = await this.service.update(id, req.body);
+      const body = req.body as Update;
+
+      const item = await this.service.update(id, body);
       res.json(item);
     } catch (e: unknown) {
-      console.error("Testar error", e);
       next(e);
     }
   };
@@ -59,4 +62,5 @@ export class BaseController<T,
       next(e);
     }
   };
+
 }
