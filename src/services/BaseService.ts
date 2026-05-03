@@ -1,4 +1,4 @@
-import { BaseRepository } from "../repositories/BaseRepository";
+import { BaseRepository } from "../repositories/BaseRepository.js";
 
 export class BaseService<T,
     CreateInput,

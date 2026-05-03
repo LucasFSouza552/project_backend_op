@@ -1,7 +1,7 @@
 import type { Organization, Prisma } from "@prisma/client";
-import { BaseService } from "./BaseService";
-import { createOrganizationSchema, updateOrganizationSchema } from "../dtos/organization.dto";
-import { OrganizationRepository } from "../repositories/OrganizationRepository";
+import { BaseService } from "./BaseService.js";
+import { createOrganizationSchema, updateOrganizationSchema } from "../dtos/organization.dto.js";
+import { OrganizationRepository } from "../repositories/OrganizationRepository.js";
 
 export class OrganizationService extends BaseService<Organization, Prisma.OrganizationCreateInput, Prisma.OrganizationUpdateInput> {
     constructor() {

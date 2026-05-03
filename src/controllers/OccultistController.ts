@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
 
 import type { Occultist, Prisma } from "@prisma/client";
-import { BaseController } from "./BaseController";
+import { BaseController } from "./BaseController.js";
 
-import ImageService from "../services/ImageService";
-import { OccultistService } from "../services/OccultistService";
+import ImageService from "../services/ImageService.js";
+import { OccultistService } from "../services/OccultistService.js";
 
 export class OccultistController extends BaseController<Occultist, Prisma.OccultistCreateInput, Prisma.ItemsUpdateInput> {
     private occultistService: OccultistService;

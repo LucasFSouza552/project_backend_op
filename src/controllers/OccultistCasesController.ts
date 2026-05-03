@@ -1,9 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 
 import type { Occultist, OccultistCases, Prisma } from "@prisma/client";
-import { BaseController } from "./BaseController";
+import { BaseController } from "./BaseController.js";
 
-import { OccultistCasesService } from "../services/OccultistCasesService";
+import { OccultistCasesService } from "../services/OccultistCasesService.js";
 
 export class OccultistCasesController extends BaseController<OccultistCases, Prisma.OccultistCasesCreateInput, Prisma.OccultistCasesUpdateInput> {
     private occultistCasesService: OccultistCasesService;

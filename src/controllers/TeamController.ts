@@ -1,9 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 
 import type { Prisma, Team, TeamDesignation, TeamStatus } from "@prisma/client";
-import { BaseController } from "./BaseController";
+import { BaseController } from "./BaseController.js";
 
-import { TeamService } from "../services/TeamService";
+import { TeamService } from "../services/TeamService.js";
 
 export class TeamController extends BaseController<Team, Prisma.TeamCreateInput, Prisma.TeamUpdateInput> {
     private teamService: TeamService;

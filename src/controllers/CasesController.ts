@@ -1,9 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 
 import type { Cases, Prisma } from "@prisma/client";
-import { BaseController } from "./BaseController";
+import { BaseController } from "./BaseController.js";
 
-import { CasesService } from "../services/CasesService";
+import { CasesService } from "../services/CasesService.js";
 
 export class CasesController extends BaseController<Cases, Prisma.CasesCreateInput, Prisma.CasesUpdateInput> {
     private CasesService: CasesService;

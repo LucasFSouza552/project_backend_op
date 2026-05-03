@@ -1,9 +1,9 @@
 import type { Cases, Occultist, Prisma } from "@prisma/client";
-import { BaseService } from "./BaseService";
-import { OccultistCasesService } from "./OccultistCasesService";
-import { createOccultistSchema } from "../dtos/occultist.dto";
-import { OccultistCasesRepository } from "../repositories/OccultistCasesRepository";
-import { OccultistRepository } from "../repositories/OccultistRepository";
+import { BaseService } from "./BaseService.js";
+import { OccultistCasesService } from "./OccultistCasesService.js";
+import { createOccultistSchema } from "../dtos/occultist.dto.js";
+import { OccultistCasesRepository } from "../repositories/OccultistCasesRepository.js";
+import { OccultistRepository } from "../repositories/OccultistRepository.js";
 
 type OccultistWithRelations = Prisma.OccultistGetPayload<{
     include: {

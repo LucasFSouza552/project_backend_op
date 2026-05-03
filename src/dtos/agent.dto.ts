@@ -4,18 +4,18 @@ import { AgentRole, AgentStatus, Privilege } from "@prisma/client";
 
 export const updateAgentSchema = z.object({
     name: z.string().min(3).optional(),
-    role: z.enum(AgentRole).optional(),
+    role: z.nativeEnum(AgentRole).optional(),
     image: z.string().optional().nullable(),
-    status: z.enum(AgentStatus).optional(),
-    accessLevel: z.enum(Privilege).optional(),
+    status: z.nativeEnum(AgentStatus).optional(),
+    accessLevel: z.nativeEnum(Privilege).optional(),
     lore: z.string().optional().nullable(),
 }).strict();
 
 export const createAgentSchema = z.object({
     name: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
-    role: z.enum(AgentRole, `Role deve ser um dos seguintes valores: ${Object.values(AgentRole).join(", ")}`),
+    role: z.nativeEnum(AgentRole),
     image: z.string().optional().nullable(),
-    status: z.enum(AgentStatus, `Status deve ser um dos seguintes valores: ${Object.values(AgentStatus).join(", ")}`),
-    accessLevel: z.enum(Privilege, `AccessLevel deve ser um dos seguintes valores: ${Object.values(Privilege).join(", ")}`).default(Privilege.RECRUTA),
+    status: z.nativeEnum(AgentStatus),
+    accessLevel: z.nativeEnum(Privilege).default(Privilege.RECRUTA),
     lore: z.string().optional().nullable(),
 }).strict();

@@ -1,9 +1,9 @@
 import type { Agent, AgentStatus, AgentRole, Prisma, Team } from "@prisma/client";
-import { AgentTeamService } from "./AgentTeamService";
-import { BaseService } from "./BaseService";
-import { createAgentSchema, updateAgentSchema } from "../dtos/agent.dto";
-import { AgentRepository } from "../repositories/AgentRepository";
-import { AgentTeamRepository } from "../repositories/AgentTeamRepository";
+import { AgentTeamService } from "./AgentTeamService.js";
+import { BaseService } from "./BaseService.js";
+import { createAgentSchema, updateAgentSchema } from "../dtos/agent.dto.js";
+import { AgentRepository } from "../repositories/AgentRepository.js";
+import { AgentTeamRepository } from "../repositories/AgentTeamRepository.js";
 
 
 type AgentWithRelations = Prisma.AgentGetPayload<{

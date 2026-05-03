@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
 
-import type { BaseService } from "../services/BaseService";
+import type { BaseService } from "../services/BaseService.js";
 
 export class BaseController<Entity,
   Create,

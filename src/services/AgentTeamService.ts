@@ -1,6 +1,6 @@
 import type { Prisma, AgentTeam, TeamDesignation, TeamStatus } from "@prisma/client";
-import { AgentTeamRepository } from "../repositories/AgentTeamRepository";
-import { TeamCasesRepository } from "../repositories/TeamCasesRepository";
+import { AgentTeamRepository } from "../repositories/AgentTeamRepository.js";
+import { TeamCasesRepository } from "../repositories/TeamCasesRepository.js";
 
 export class AgentTeamService {
     constructor(private repository: AgentTeamRepository) {

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { OccultistController } from "../controllers/OccultistController";
-import { upload } from "../middleware/upload";
+import { OccultistController } from "../controllers/OccultistController.js";
+import { upload } from "../middleware/upload.js";
 
 const router = Router();
 const controller = new OccultistController();

@@ -1,13 +1,13 @@
 import { Router } from "express";
 
-import agentRoutes from "./agents";
-import casesRoutes from "./cases";
-import imageRoutes from "./images";
-import itemRoutes from "./items";
-import occultistRoutes from "./occultists";
-import organizationRoutes from "./organizations";
-import teamRoutes from "./teams";
-import randomRoutes from "./random";
+import agentRoutes from "./agents.js";
+import casesRoutes from "./cases.js";
+import imageRoutes from "./images.js";
+import itemRoutes from "./items.js";
+import occultistRoutes from "./occultists.js";
+import organizationRoutes from "./organizations.js";
+import teamRoutes from "./teams.js";
+import randomRoutes from "./random.js";
 
 const router = Router();
 

@@ -16,12 +16,17 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
 app.use("/api", indexRoutes)
 
 app.use(errorHandler);
+
+let isConnected = false;
+async function initDB() {
+  if (!isConnected) {
+    await connectDB();
+    isConnected = true;
+  }
+}
+initDB();
 
 export default app;

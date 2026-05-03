@@ -1,8 +1,8 @@
 import type { OccultistCases, Prisma } from "@prisma/client";
-import { BaseService } from "./BaseService";
-import { CaseRepository } from "../repositories/CaseRepository";
-import { OccultistCasesRepository } from "../repositories/OccultistCasesRepository";
-import { OccultistRepository } from "../repositories/OccultistRepository";
+import { BaseService } from "./BaseService.js";
+import { CaseRepository } from "../repositories/CaseRepository.js";
+import { OccultistCasesRepository } from "../repositories/OccultistCasesRepository.js";
+import { OccultistRepository } from "../repositories/OccultistRepository.js";
 
 export class OccultistCasesService extends BaseService<OccultistCases, Prisma.OccultistCasesCreateInput, Prisma.OccultistCasesUpdateInput> {
     protected repository: OccultistCasesRepository;

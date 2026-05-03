@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { RandomizerController } from "../controllers/RandomizerController";
+import { RandomizerController } from "../controllers/RandomizerController.js";
 
 const router = Router();
 const controller = new RandomizerController();

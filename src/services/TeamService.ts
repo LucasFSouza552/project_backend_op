@@ -1,9 +1,9 @@
 import type { Cases, Prisma, Team, TeamDesignation, TeamStatus } from "@prisma/client";
-import { BaseService } from "./BaseService";
-import { TeamRepository } from "../repositories/TeamRepository";
-import { createTeamSchema, updateTeamSchema } from "../dtos/team.dto";
-import { AgentTeamRepository } from "../repositories/AgentTeamRepository";
-import { AgentTeamService } from "./AgentTeamService";
+import { BaseService } from "./BaseService.js";
+import { TeamRepository } from "../repositories/TeamRepository.js";
+import { createTeamSchema, updateTeamSchema } from "../dtos/team.dto.js";
+import { AgentTeamRepository } from "../repositories/AgentTeamRepository.js";
+import { AgentTeamService } from "./AgentTeamService.js";
 
 type TeamWithRelations = Prisma.TeamGetPayload<{
     include: {

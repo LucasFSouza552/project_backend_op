@@ -1,6 +1,6 @@
 import type { Prisma, TeamCases } from "@prisma/client";
-import { BaseService } from "./BaseService";
-import { TeamCasesRepository } from "../repositories/TeamCasesRepository";
+import { BaseService } from "./BaseService.js";
+import { TeamCasesRepository } from "../repositories/TeamCasesRepository.js";
 
 export class TeamCasesService extends BaseService<TeamCases, Prisma.TeamCasesCreateInput, Prisma.TeamCasesUpdateInput> {
     constructor() {

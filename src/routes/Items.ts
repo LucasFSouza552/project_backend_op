@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import { upload } from "./../middleware/upload";
-import { ItemController } from "../controllers/ItemController";
+import { upload } from "./../middleware/upload.js";
+import { ItemController } from "../controllers/ItemController.js";
 
 const router = Router();
 const controller = new ItemController();

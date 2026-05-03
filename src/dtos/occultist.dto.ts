@@ -4,18 +4,18 @@ import { AgentStatus, OperationScope, OrderRelationship, OrganizationStatus, Org
 
 export const updateOccultistSchema = z.object({
     name: z.string().min(3).optional(),
-    status: z.enum(AgentStatus).optional(),
+    status: z.nativeEnum(AgentStatus).optional(),
     lore: z.string().optional().nullable(),
     image: z.string().optional().nullable(),
     cases: z.string().optional().nullable(),
-    accessLevel: z.enum(Privilege, `AccessLevel deve ser um dos seguintes valores: ${Object.values(Privilege).join(", ")}`),
+    accessLevel: z.nativeEnum(Privilege),
 }).strict();
 
 export const createOccultistSchema = z.object({
     name: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
-    status: z.enum(AgentStatus, `Status deve ser um dos seguintes valores: ${Object.values(AgentStatus).join(", ")}`),
+    status: z.nativeEnum(AgentStatus),
     lore: z.string().optional().nullable(),
-    accessLevel: z.enum(Privilege, `AccessLevel deve ser um dos seguintes valores: ${Object.values(Privilege).join(", ")}`).default(Privilege.RECRUTA),
+    accessLevel: z.nativeEnum(Privilege).default(Privilege.RECRUTA),
     image: z.string().optional().nullable(),
     cases: z.string().optional().nullable(),
 }).strict();

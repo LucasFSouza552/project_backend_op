@@ -1,8 +1,8 @@
 import type { Cases, Occultist, Prisma, Team } from "@prisma/client";
-import { BaseService } from "./BaseService";
-import { TeamCasesService } from "./TeamCasesService";
-import { createCaseSchema } from "../dtos/cases.dto";
-import { CaseRepository } from "../repositories/CaseRepository";
+import { BaseService } from "./BaseService.js";
+import { TeamCasesService } from "./TeamCasesService.js";
+import { createCaseSchema } from "../dtos/cases.dto.js";
+import { CaseRepository } from "../repositories/CaseRepository.js";
 
 type CaseWithRelations = Prisma.CasesGetPayload<{
     include: {

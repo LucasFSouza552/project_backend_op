@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { OccultistCasesController } from "../controllers/OccultistCasesController";
+import { OccultistCasesController } from "../controllers/OccultistCasesController.js";
 
 const router = Router();
 const controller = new OccultistCasesController();

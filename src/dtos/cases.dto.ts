@@ -7,7 +7,7 @@ export const CaseSchema = z.object({
     name: z.string(),
     description: z.string(),
 
-    accessLevel: z.enum(Privilege),
+    accessLevel: z.nativeEnum(Privilege),
     occultists: z.array(
         z.object({
             id: z.string().optional(),
@@ -30,7 +30,7 @@ export const updateCaseSchema = z.object({
         })
     ).optional(),
 
-    accessLevel: z.enum(Privilege, `AccessLevel deve ser um dos seguintes valores: ${Object.values(Privilege).join(", ")}`),
+    accessLevel: z.nativeEnum(Privilege),
     teams: z.array(
         z.object({
             id: z.string()
@@ -43,7 +43,7 @@ export const createCaseSchema = z.object({
     name: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
     description: z.string(),
 
-    accessLevel: z.enum(Privilege, `AccessLevel deve ser um dos seguintes valores: ${Object.values(Privilege).join(", ")}`).default(Privilege.RECRUTA),
+    accessLevel: z.nativeEnum(Privilege).default(Privilege.RECRUTA),
     occultists: z.array(
         z.object({
             id: z.string()

@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { CasesController } from "../controllers/CasesController";
+import { CasesController } from "../controllers/CasesController.js";
 
 const router = Router();
 const controller = new CasesController();

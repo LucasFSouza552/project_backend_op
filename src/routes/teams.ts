@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { TeamController } from "../controllers/TeamController";
-import { CasesController } from "../controllers/CasesController";
+import { TeamController } from "../controllers/TeamController.js";
+import { CasesController } from "../controllers/CasesController.js";
 
 const router = Router();
 const controller = new TeamController();

@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
 
 import type { Agent, AgentStatus, AgentRole, Privilege, Prisma } from "@prisma/client";
-import { BaseController } from "./BaseController";
+import { BaseController } from "./BaseController.js";
 
-import { AgentService } from "../services/AgentService";
-import ImageService from "../services/ImageService";
+import { AgentService } from "../services/AgentService.js";
+import ImageService from "../services/ImageService.js";
 
 export class AgentController extends BaseController<Agent, Prisma.AgentCreateInput, Prisma.AgentUpdateInput> {
   private agentService: AgentService;

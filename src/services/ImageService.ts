@@ -1,6 +1,7 @@
-import { ObjectId } from "mongodb";
+import { Types } from "mongoose";
+const { ObjectId } = Types;
 import { pipeline, Readable } from "stream";
-import { gridFSBucket } from "../database/mongo";
+import { gridFSBucket } from "../database/mongo.js";
 
 export default class ImageService {
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { AgentController } from "../controllers/AgentController";
-import { upload } from "../middleware/upload";
+import { AgentController } from "../controllers/AgentController.js";
+import { upload } from "../middleware/upload.js";
 
 const router = Router();
 const controller = new AgentController();

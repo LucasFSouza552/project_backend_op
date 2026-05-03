@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
 
 import type { Items, Prisma } from "@prisma/client";
-import { BaseController } from "./BaseController";
+import { BaseController } from "./BaseController.js";
 
-import ImageService from "../services/ImageService";
-import { ItemService } from "../services/ItemService";
+import ImageService from "../services/ImageService.js";
+import { ItemService } from "../services/ItemService.js";
 
 export class ItemController extends BaseController<Items, Prisma.ItemsCreateInput, Prisma.ItemsUpdateInput> {
     private itemService: ItemService

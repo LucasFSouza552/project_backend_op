@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
-import { RandomizerService } from "../services/RandomizerService";
-import { AgentService } from "../services/AgentService";
-import { TeamService } from "../services/TeamService";
-import { OccultistService } from "../services/OccultistService";
-import { OrganizationService } from "../services/OrganizationService";
-import { ItemService } from "../services/ItemService";
-import { CasesService } from "../services/CasesService";
+import { RandomizerService } from "../services/RandomizerService.js";
+import { AgentService } from "../services/AgentService.js";
+import { TeamService } from "../services/TeamService.js";
+import { OccultistService } from "../services/OccultistService.js";
+import { OrganizationService } from "../services/OrganizationService.js";
+import { ItemService } from "../services/ItemService.js";
+import { CasesService } from "../services/CasesService.js";
 
 export class RandomizerController {
   private agentService = new AgentService();
