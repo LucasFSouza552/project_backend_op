@@ -1,7 +1,7 @@
 import type { Cases, Occultist, Prisma } from "@prisma/client";
 import { BaseService } from "./BaseService.js";
 import { OccultistCasesService } from "./OccultistCasesService.js";
-import { createOccultistSchema } from "../dtos/occultist.dto.js";
+import { createOccultistSchema, updateOccultistSchema } from "../dtos/occultist.dto.js";
 import { OccultistCasesRepository } from "../repositories/OccultistCasesRepository.js";
 import { OccultistRepository } from "../repositories/OccultistRepository.js";
 
@@ -55,7 +55,7 @@ export class OccultistService extends BaseService<Occultist, Prisma.OccultistCre
     }
 
     override async update(id: string, data: Prisma.OccultistUpdateInput) {
-        const validated = createOccultistSchema.parse(data);
+        const validated = updateOccultistSchema.parse(data);
         return this.repository.update(id, validated as Prisma.OccultistUpdateInput);
     }
 

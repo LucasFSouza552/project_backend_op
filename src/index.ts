@@ -1,7 +1,6 @@
 import cors from "cors";
 import express from "express";
 
-import connectDB from "./database/mongo.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 import indexRoutes from "./routes/router.js";

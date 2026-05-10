@@ -21,7 +21,7 @@ export const CaseSchema = z.object({
 });
 
 export const updateCaseSchema = z.object({
-    name: z.string().min(3).optional(),
+    name: z.string().min(3, "Nome deve ter no mínimo 3 caracteres").optional(),
     description: z.string().optional(),
 
     occultists: z.array(

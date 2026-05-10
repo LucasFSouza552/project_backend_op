@@ -9,10 +9,10 @@ export function errorHandler(
     res: Response,
     next: NextFunction
 ) {
-    console.error("error", error);
+    console.error("Error Capturado no Handler", error);
 
     if (error instanceof ZodError) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "Erro de validação",
             errors: error.issues.map((issue) => {
 
@@ -23,16 +23,23 @@ export function errorHandler(
                     };
                 }
 
+                if (issue.code === "too_small") {
+                    return {
+                        field: "body",
+                        message: issue.message
+                    };
+                }
+
                 return {
                     field: issue.path.length ? issue.path.join(".") : "body",
                     message: issue.message
                 };
             })
         });
+        return
     }
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        // P2025 = Record not found
         if (error.code === "P2025") {
             return res.status(404).json({ message: "Not found" });
         }
@@ -42,14 +49,12 @@ export function errorHandler(
         });
     }
 
-    // 🔥 Erros de validação
     if (error instanceof Prisma.PrismaClientValidationError) {
         return res.status(422).json({
             message: "Invalid data sent to database",
         });
     }
 
-    // 🔥 Erro genérico
     return res.status(500).json({
         message: "Internal server error",
     });

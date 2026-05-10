@@ -15,7 +15,7 @@ export const createItemSchema = z.object({
 }).strict();
 
 export const updateItemSchema = z.object({
-    name: z.string().min(3).optional(),
+    name: z.string().min(3, "Nome deve ter no mínimo 3 caracteres").optional(),
     type: z.nativeEnum(ItemType).optional(),
     size: z.nativeEnum(ItemSize).optional(),
     elements: z.nativeEnum(ItemElement).optional(),

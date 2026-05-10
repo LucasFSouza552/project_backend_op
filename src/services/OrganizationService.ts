@@ -14,8 +14,8 @@ export class OrganizationService extends BaseService<Organization, Prisma.Organi
     }
 
     override async update(id: string, data: Prisma.OrganizationUpdateInput) {
-        console.log(data);
         const validated = updateOrganizationSchema.parse(data);
         return this.repository.update(id, validated as Prisma.OrganizationUpdateInput);
+
     }
 }

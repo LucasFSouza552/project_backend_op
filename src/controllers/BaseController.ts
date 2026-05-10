@@ -45,7 +45,6 @@ export class BaseController<Entity,
     try {
       const id = req.params.id as string;
       const body = req.body as Update;
-
       const item = await this.service.update(id, body);
       res.json(item);
     } catch (e: unknown) {

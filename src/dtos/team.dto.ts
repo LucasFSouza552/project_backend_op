@@ -2,7 +2,7 @@ import { TeamDesignation, TeamStatus } from "@prisma/client";
 import z from "zod";
 
 export const updateTeamSchema = z.object({
-    name: z.string().min(3).optional(),
+    name: z.string().min(3, "Nome deve ter no mínimo 3 caracteres").optional(),
     status: z.nativeEnum(TeamStatus).optional(),
     designation: z.string().optional()
 }).strict();

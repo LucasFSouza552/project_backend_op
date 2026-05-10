@@ -6,7 +6,7 @@ import { BaseController } from "./BaseController.js";
 import ImageService from "../services/ImageService.js";
 import { OccultistService } from "../services/OccultistService.js";
 
-export class OccultistController extends BaseController<Occultist, Prisma.OccultistCreateInput, Prisma.ItemsUpdateInput> {
+export class OccultistController extends BaseController<Occultist, Prisma.OccultistCreateInput, Prisma.OccultistUpdateInput> {
     private occultistService: OccultistService;
 
     constructor() {
@@ -25,16 +25,37 @@ export class OccultistController extends BaseController<Occultist, Prisma.Occult
                 image = await ImageService.upload(file);
             }
 
-            const data = {
+            const caseIds = this.getCaseIds(req.body);
+            
+            const data: Prisma.OccultistCreateInput = {
                 ...body,
                 ...(image !== undefined && { image }),
+                cases: {
+                    create: caseIds.map(id => ({
+                        casesId: id
+                    }))
+                }
             };
+
+            delete (data as any)["cases[]"];
 
             const item = await this.occultistService.create(data);
             res.status(201).json(item);
         } catch (e: unknown) {
             next(e);
         }
+    }
+
+    private getCaseIds(body: any): string[] {
+        let caseIds: string[] = [];
+        if (body.cases) {
+            caseIds = Array.isArray(body.cases) ? body.cases : [body.cases];
+        } else if (body["cases[]"]) {
+            caseIds = Array.isArray(body["cases[]"])
+                ? body["cases[]"]
+                : [body["cases[]"]];
+        }
+        return caseIds;
     }
 
     update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -62,20 +83,17 @@ export class OccultistController extends BaseController<Occultist, Prisma.Occult
                 image = null;
             }
 
-            let caseIds: string[] = [];
-
-            if (req.body["cases[]"]) {
-                caseIds = Array.isArray(req.body["cases[]"])
-                    ? req.body["cases[]"]
-                    : [req.body["cases[]"]];
-            }
+            const caseIds = this.getCaseIds(req.body);
 
             const data: Prisma.OccultistUpdateInput = {
                 ...body,
                 ...(image !== undefined && { image }),
 
                 cases: {
-                    set: caseIds.map(id => ({ id }))
+                    deleteMany: {},
+                    create: caseIds.map(id => ({
+                        casesId: id
+                    }))
                 }
             };
 

@@ -3,13 +3,13 @@ import { z } from "zod";
 import { AgentStatus, OperationScope, OrderRelationship, OrganizationStatus, OrganizationType, Privilege, RiskLevel } from "@prisma/client";
 
 export const updateOccultistSchema = z.object({
-    name: z.string().min(3).optional(),
+    name: z.string().min(3, "Nome deve ter no mínimo 3 caracteres").optional(),
     status: z.nativeEnum(AgentStatus).optional(),
     lore: z.string().optional().nullable(),
     image: z.string().optional().nullable(),
-    cases: z.string().optional().nullable(),
-    accessLevel: z.nativeEnum(Privilege),
-}).strict();
+    cases: z.any().optional().nullable(),
+    accessLevel: z.nativeEnum(Privilege).optional(),
+});
 
 export const createOccultistSchema = z.object({
     name: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
@@ -17,5 +17,6 @@ export const createOccultistSchema = z.object({
     lore: z.string().optional().nullable(),
     accessLevel: z.nativeEnum(Privilege).default(Privilege.RECRUTA),
     image: z.string().optional().nullable(),
-    cases: z.string().optional().nullable(),
-}).strict();
+    cases: z.any().optional().nullable(),
+});
+
