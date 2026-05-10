@@ -8,7 +8,6 @@ import ImageService from "../services/ImageService.js";
 
 export class AgentController extends BaseController<Agent, Prisma.AgentCreateInput, Prisma.AgentUpdateInput> {
   private agentService: AgentService;
-  
 
   constructor() {
     const service = new AgentService();

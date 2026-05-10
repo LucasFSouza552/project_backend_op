@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/local.ts",
+    "dev": "tsx watch src/local.ts dev",
     "build": "prisma generate",
     "postinstall": "prisma generate"
   },
