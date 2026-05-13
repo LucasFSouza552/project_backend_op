@@ -7,7 +7,7 @@ export class TeamCasesService extends BaseService<TeamCases, Prisma.TeamCasesCre
         super(new TeamCasesRepository());
     }
 
-        async addCaseToTeam(caseId: string, teamId: string) {
+    async addCaseToTeam(caseId: string, teamId: string) {
         return await this.repository.create({
             case: { connect: { id: caseId } },
             team: { connect: { id: teamId } }
@@ -16,9 +16,9 @@ export class TeamCasesService extends BaseService<TeamCases, Prisma.TeamCasesCre
 
     async removeCaseFromTeam(caseId: string, teamId: string) {
         return await this.repository.deleteWhere({
-            caseId_teamId: {
-                caseId,
-                teamId
+            teamId_caseId: {
+                teamId,
+                caseId
             }
         });
     }
